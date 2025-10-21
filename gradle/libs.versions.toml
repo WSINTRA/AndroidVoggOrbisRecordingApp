@@ -1,6 +1,6 @@
 [versions]
 agp = "8.13.0"
-espressoCoreVersion = "3.5.1"
+espressoCoreVersion = "3.7.0"
 kotlin = "2.2.20"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -12,22 +12,15 @@ composeBom = "2025.10.00"
 materialIconsExtended = "1.7.8"
 mockk = "1.14.6"
 material = "1.13.0"
-androidx-test-rules = "1.5.0"
+androidx-test-rules = "1.7.0"
 rules = "1.7.0"
 runner = "1.7.0"
 uiTestJunit4 = "1.9.3"
 
 [libraries]
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
-androidx-espresso-core-v351 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
 androidx-rules-v170 = { module = "androidx.test:rules", version.ref = "rules" }
-androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test-rules" }
-androidx-compose-ui-test-junit = { module = "androidx.compose.ui:ui-test-junit" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-rules = { module = "androidx.test:rules" }
-androidx-runner = { module = "androidx.test:runner" }
-androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
-ext-junit = { module = "androidx.test.ext:junit" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -41,10 +34,8 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-mockito-android = { module = "org.mockito:mockito-android" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "uiTestJunit4" }
 runner = { module = "androidx.test:runner", version.ref = "runner" }
 
 [plugins]
