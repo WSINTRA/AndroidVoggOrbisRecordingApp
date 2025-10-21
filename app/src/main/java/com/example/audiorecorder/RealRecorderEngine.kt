@@ -14,8 +14,10 @@ class RealRecorderEngine(
     override fun prepare(output: File) {
         mediaRecorder.apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            setAudioSamplingRate(48000) // Professional standard
+            setAudioEncodingBitRate(320000) // Maximum quality
+            setAudioChannels(2) // Stereo if supported
             setOutputFile(output.absolutePath)
             try {
                 prepare()
