@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.audiorecorder"
-        minSdk = 36
+        minSdk = 35
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.material)
+    implementation(libs.androidx.compose.material.icons.extended)
 
     // Unit tests
     testImplementation(libs.junit)
@@ -58,11 +59,11 @@ dependencies {
 
     // Instrumented tests
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    androidTestImplementation("androidx.test:runner:1.5.2")
-    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation(libs.runner)
+    androidTestImplementation(libs.androidx.rules.v170)
+    androidTestImplementation(libs.androidx.espresso.core)
 
     // Debug
     debugImplementation(libs.androidx.compose.ui.tooling)
