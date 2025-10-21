@@ -1,6 +1,5 @@
 [versions]
 agp = "8.13.0"
-espressoCoreVersion = "3.7.0"
 kotlin = "2.2.20"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -12,10 +11,8 @@ composeBom = "2025.10.00"
 materialIconsExtended = "1.7.8"
 mockk = "1.14.6"
 material = "1.13.0"
-androidx-test-rules = "1.7.0"
 rules = "1.7.0"
 runner = "1.7.0"
-uiTestJunit4 = "1.9.3"
 
 [libraries]
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
