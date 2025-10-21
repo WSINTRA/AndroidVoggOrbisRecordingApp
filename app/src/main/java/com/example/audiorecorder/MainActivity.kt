@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.audiorecorder.ui.theme.AudioRecorderTheme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -19,6 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class MainActivity : ComponentActivity() {
     private lateinit var audioRecorder: AudioRecorder
     private lateinit var recordedTakesRepository: RecordedTakesRepository
+
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
@@ -36,6 +38,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Initialize dependencies
         val engine: RecorderEngine = RealRecorderEngine(this)
         val outputFactory: OutputFileFactory = RealOutputFileFactory(this)
         audioRecorder = AudioRecorder(engine, outputFactory)
@@ -48,52 +52,87 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AudioRecorderTheme {
-                val context = LocalContext.current
-                var isRecording by remember { mutableStateOf(false) }
+                MainScreen()
+            }
+        }
+    }
 
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    // Check permission status
-                    val permissionGranted = ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.RECORD_AUDIO
-                    ) == PackageManager.PERMISSION_GRANTED
+    @Composable
+    private fun MainScreen() {
+        val context = LocalContext.current
+        var isRecording by remember { mutableStateOf(false) }
+        var recordedTakes by remember { mutableStateOf(recordedTakesRepository.getAllTakes()) }
 
-                    // Start/Stop Button
-                    Button(
-                        onClick = {
-                            if (!isRecording) {
-                                if (permissionGranted) {
-                                    startRecording()
-                                    isRecording = true
-                                } else {
-                                    requestPermissionLauncher.launch(
-                                        Manifest.permission.RECORD_AUDIO
-                                    )
-                                }
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // Recording controls at the top
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Check permission status
+                val permissionGranted = ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.RECORD_AUDIO
+                ) == PackageManager.PERMISSION_GRANTED
+
+                // Start/Stop Button
+                Button(
+                    onClick = {
+                        if (!isRecording) {
+                            if (permissionGranted) {
+                                startRecording()
+                                isRecording = true
                             } else {
-                                stopRecording()
-                                isRecording = false
+                                requestPermissionLauncher.launch(
+                                    Manifest.permission.RECORD_AUDIO
+                                )
                             }
-                        },
+                        } else {
+                            stopRecording()
+                            isRecording = false
+                            // Refresh the list after recording stops
+                            recordedTakes = recordedTakesRepository.getAllTakes()
+                        }
+                    },
+                    enabled = !isRecording || permissionGranted
+                ) {
+                    Text(if (isRecording) "Stop Recording" else "Start Recording")
+                }
 
-                        enabled = !isRecording || permissionGranted
-                    ) {
-                        Text(if (isRecording) "Stop Recording" else "Start Recording")
-                    }
-
-                    // Status Text
-                    if (isRecording) {
-                        Text(
-                            text = "Recording started...",
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                // Status Text
+                if (isRecording) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Recording started...",
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
+
+            // Divider
+            HorizontalDivider()
+
+            // List of recordings
+            RecordedTakesList(
+                takes = recordedTakes,
+                onPlayClick = { take ->
+                    // TODO: Implement playback
+                    println("Play clicked: ${take.filename}")
+                },
+                onDeleteClick = { take ->
+                    // Delete the recording
+                    val deleted = recordedTakesRepository.deleteTake(take)
+                    if (deleted) {
+                        // Refresh the list
+                        recordedTakes = recordedTakesRepository.getAllTakes()
+                    }
+                },
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 
