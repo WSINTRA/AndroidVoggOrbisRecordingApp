@@ -18,6 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : ComponentActivity() {
     private lateinit var audioRecorder: AudioRecorder
+    private lateinit var recordedTakesRepository: RecordedTakesRepository
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
@@ -38,6 +39,12 @@ class MainActivity : ComponentActivity() {
         val engine: RecorderEngine = RealRecorderEngine(this)
         val outputFactory: OutputFileFactory = RealOutputFileFactory(this)
         audioRecorder = AudioRecorder(engine, outputFactory)
+
+        // Initialize repository for managing recorded takes
+        val fileProvider: FileProvider = RealFileProvider(this)
+        val metadataReaderFactory: MediaMetadataRetrieverFactory = RealMediaMetadataRetrieverFactory()
+        val audioMetadataReader: AudioMetadataReader = RealAudioMetadataReader(metadataReaderFactory)
+        recordedTakesRepository = RecordedTakesRepository(fileProvider, audioMetadataReader)
 
         setContent {
             AudioRecorderTheme {
