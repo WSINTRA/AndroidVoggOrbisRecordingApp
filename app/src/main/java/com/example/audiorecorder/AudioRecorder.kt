@@ -12,4 +12,8 @@ class AudioRecorder (
         engine.start()
         return file
     }
+    fun stop(): File {
+        engine.stop()
+        return outputFactory.nextFile()
+    }
 }

@@ -9,9 +9,17 @@ lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
 composeBom = "2025.10.00"
 mockk = "1.14.6"
+material = "1.13.0"
+androidx-test-rules = "1.5.0"
 
 [libraries]
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test-rules" }
+androidx-compose-ui-test-junit = { module = "androidx.compose.ui:ui-test-junit" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-rules = { module = "androidx.test:rules" }
+androidx-runner = { module = "androidx.test:runner" }
+androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+ext-junit = { module = "androidx.test.ext:junit" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -25,7 +33,9 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+mockito-android = { module = "org.mockito:mockito-android" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
