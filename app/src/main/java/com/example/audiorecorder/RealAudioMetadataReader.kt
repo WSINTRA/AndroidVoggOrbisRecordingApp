@@ -21,12 +21,16 @@ class RealAudioMetadataReader(
             durationString?.toLongOrNull() ?: 0L
         } catch (e: Exception) {
             // Return 0 if we can't read the file
+            println("Error reading file: ${file.absolutePath}")
+            e.printStackTrace()
             0L
         } finally {
             // Always release the retriever
             try {
                 retriever.release()
             } catch (e: Exception) {
+                println("Error releasing retriever")
+                e.printStackTrace()
                 // Ignore release errors
             }
         }
