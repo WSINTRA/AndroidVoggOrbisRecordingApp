@@ -3,6 +3,7 @@ package com.example.audiorecorder
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import io.mockk.verifyOrder
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -35,4 +36,19 @@ class AudioRecorderTest {
         confirmVerified(engine, outputFactory)
     }
 
+    @Test
+    fun shouldReturnSameFileFromStartAndStop() {
+        // Arrange
+        val file = File("/path/to/output.m4a")
+        every { outputFactory.nextFile() } returns file
+
+        // Act
+        val startFile = recorder.start()
+        val stopFile = recorder.stop()
+
+        // Assert
+        assertEquals(file, startFile)
+        assertEquals(file, stopFile)
+        verify(exactly = 1) { outputFactory.nextFile() } // Should only call once
+    }
 }

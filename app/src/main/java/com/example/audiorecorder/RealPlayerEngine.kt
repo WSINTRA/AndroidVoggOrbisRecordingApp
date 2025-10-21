@@ -1,5 +1,6 @@
 package com.example.audiorecorder
 
+import android.media.AudioAttributes
 import android.media.MediaPlayer
 
 /**
@@ -7,7 +8,15 @@ import android.media.MediaPlayer
  */
 class RealPlayerEngine : PlayerEngine {
 
-    private val mediaPlayer = MediaPlayer()
+    private val mediaPlayer = MediaPlayer().apply {
+        // Set audio attributes to use media playback (loudspeaker)
+        setAudioAttributes(
+            AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .build()
+        )
+    }
 
     override fun setDataSource(path: String) {
         mediaPlayer.setDataSource(path)

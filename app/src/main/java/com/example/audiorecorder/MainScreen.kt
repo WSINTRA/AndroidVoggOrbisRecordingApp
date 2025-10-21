@@ -51,8 +51,9 @@ fun MainScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Check permission status
             val permissionGranted = ContextCompat.checkSelfPermission(
@@ -60,6 +61,7 @@ fun MainScreen(
                 Manifest.permission.RECORD_AUDIO
             ) == PackageManager.PERMISSION_GRANTED
 
+            Spacer(modifier = Modifier.height(32.dp))
             // Recording Timer
             if (isRecording) {
                 RecordingTimer(

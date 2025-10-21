@@ -1,16 +1,22 @@
 package com.example.audiorecorder
 
-import android.content.Context
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
-class RealOutputFileFactory(private val context: Context) : OutputFileFactory {
+/**
+ * Real implementation of OutputFileFactory
+ */
+class RealOutputFileFactory(
+    private val fileProvider: FileProvider
+) : OutputFileFactory {
+
     override fun nextFile(): File {
-        val outputDir = context.filesDir
+        val outputDirectory = fileProvider.getRecordingsDirectory()
         val timestamp = SimpleDateFormat("yyyyMMdd_HHmm", Locale.US).format(Date())
-        val fileName = "recording_$timestamp.mp4"
-        return File(outputDir, fileName)
+        val fileName = "recording_$timestamp.m4a"
+        val file = File(outputDirectory, fileName)
+        println("Creating output file: ${file.absolutePath}")
+        return file
     }
 }
