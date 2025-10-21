@@ -1,32 +1,25 @@
 package com.example.audiorecorder
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import com.example.audiorecorder.ui.theme.AudioRecorderTheme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : ComponentActivity() {
     private lateinit var audioRecorder: AudioRecorder
     private lateinit var recordedTakesRepository: RecordedTakesRepository
+    private lateinit var audioPlayer: AudioPlayer
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
             // Permission granted, start recording
-            startRecording()
+            handleStartRecording()
         } else {
             // Permission denied, show error
             MaterialAlertDialogBuilder(this).apply {
@@ -50,93 +43,91 @@ class MainActivity : ComponentActivity() {
         val audioMetadataReader: AudioMetadataReader = RealAudioMetadataReader(metadataReaderFactory)
         recordedTakesRepository = RecordedTakesRepository(fileProvider, audioMetadataReader)
 
+        // Initialize audio player
+        val playerEngine: PlayerEngine = RealPlayerEngine()
+        audioPlayer = AudioPlayer(playerEngine)
+
         setContent {
             AudioRecorderTheme {
-                MainScreen()
+                MainScreenContainer()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        audioPlayer.release()
     }
 
     @Composable
-    private fun MainScreen() {
-        val context = LocalContext.current
+    private fun MainScreenContainer() {
         var isRecording by remember { mutableStateOf(false) }
         var recordedTakes by remember { mutableStateOf(recordedTakesRepository.getAllTakes()) }
+        var currentlyPlayingTake by remember { mutableStateOf<RecordedTake?>(null) }
 
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            // Recording controls at the top
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                // Check permission status
-                val permissionGranted = ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.RECORD_AUDIO
-                ) == PackageManager.PERMISSION_GRANTED
-
-                // Start/Stop Button
-                Button(
-                    onClick = {
-                        if (!isRecording) {
-                            if (permissionGranted) {
-                                startRecording()
-                                isRecording = true
-                            } else {
-                                requestPermissionLauncher.launch(
-                                    Manifest.permission.RECORD_AUDIO
-                                )
-                            }
-                        } else {
-                            stopRecording()
-                            isRecording = false
-                            // Refresh the list after recording stops
-                            recordedTakes = recordedTakesRepository.getAllTakes()
-                        }
-                    },
-                    enabled = !isRecording || permissionGranted
-                ) {
-                    Text(if (isRecording) "Stop Recording" else "Start Recording")
+        MainScreen(
+            recordedTakes = recordedTakes,
+            isRecording = isRecording,
+            currentlyPlayingTake = currentlyPlayingTake,
+            isPlaying = audioPlayer.isPlaying(),
+            onStartRecordingClick = {
+                // Stop playback before recording
+                if (currentlyPlayingTake != null) {
+                    audioPlayer.stop()
+                    currentlyPlayingTake = null
                 }
-
-                // Status Text
+                handleStartRecording()
+                isRecording = true
+            },
+            onStopRecordingClick = {
+                handleStopRecording()
+                isRecording = false
+                // Refresh the list after recording stops
+                recordedTakes = recordedTakesRepository.getAllTakes()
+            },
+            onPlayClick = { take ->
+                // Stop recording if active
                 if (isRecording) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Recording started...",
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                    handleStopRecording()
+                    isRecording = false
+                    recordedTakes = recordedTakesRepository.getAllTakes()
                 }
-            }
 
-            // Divider
-            HorizontalDivider()
+                // Toggle playback
+                if (currentlyPlayingTake == take && audioPlayer.isPlaying()) {
+                    audioPlayer.pause()
+                    currentlyPlayingTake = null
+                } else {
+                    audioPlayer.play(take.file)
+                    currentlyPlayingTake = take
 
-            // List of recordings
-            RecordedTakesList(
-                takes = recordedTakes,
-                onPlayClick = { take ->
-                    // TODO: Implement playback
-                    println("Play clicked: ${take.filename}")
-                },
-                onDeleteClick = { take ->
-                    // Delete the recording
-                    val deleted = recordedTakesRepository.deleteTake(take)
-                    if (deleted) {
-                        // Refresh the list
-                        recordedTakes = recordedTakesRepository.getAllTakes()
+                    // Set completion listener to clear playing state
+                    audioPlayer.setOnCompletionListener {
+                        currentlyPlayingTake = null
                     }
-                },
-                modifier = Modifier.weight(1f)
-            )
-        }
+                }
+            },
+            onDeleteClick = { take ->
+                // Stop playback if this file is playing
+                if (currentlyPlayingTake == take) {
+                    audioPlayer.stop()
+                    currentlyPlayingTake = null
+                }
+
+                // Delete the recording
+                val deleted = recordedTakesRepository.deleteTake(take)
+                if (deleted) {
+                    // Refresh the list
+                    recordedTakes = recordedTakesRepository.getAllTakes()
+                }
+            },
+            onRequestPermission = {
+                requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+            }
+        )
     }
 
-    private fun startRecording() {
+    private fun handleStartRecording() {
         try {
             val fileName = audioRecorder.start()
             println("Recording started - $fileName")
@@ -145,7 +136,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun stopRecording() {
+    private fun handleStopRecording() {
         try {
             audioRecorder.stop()
             println("Recording stopped")
