@@ -50,6 +50,7 @@ class RealPlayerEngine : PlayerEngine {
         return try {
             mediaPlayer.currentPosition
         } catch (e: IllegalStateException) {
+            println("Error getting current position: ${e.message}")
             0
         }
     }
@@ -58,6 +59,7 @@ class RealPlayerEngine : PlayerEngine {
         return try {
             mediaPlayer.duration
         } catch (e: IllegalStateException) {
+            println("Error getting duration: ${e.message}")
             0
         }
     }
@@ -75,6 +77,7 @@ class RealPlayerEngine : PlayerEngine {
         return try {
             mediaPlayer.isPlaying
         } catch (e: IllegalStateException) {
+            println("Error checking if playing: ${e.message}")
             false
         }
     }
@@ -83,6 +86,7 @@ class RealPlayerEngine : PlayerEngine {
         try {
             mediaPlayer.release()
         } catch (e: IllegalStateException) {
+            println("Error releasing media player: ${e.message}")
             // Ignore
         }
     }
