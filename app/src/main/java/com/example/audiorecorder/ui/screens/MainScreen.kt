@@ -78,7 +78,12 @@ fun MainScreen(
                 Manifest.permission.RECORD_AUDIO
             ) == PackageManager.PERMISSION_GRANTED
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(40.dp))
+
+            if(!isRecording && !isPlaying) TimerUI(
+                elapsedTimeMillis = recordingElapsedTime,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
             // Recording Timer
             if (isRecording) {
                 TimerUI(
