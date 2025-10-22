@@ -28,7 +28,8 @@ class RecordedTakeItemInstrumentedTest {
             RecordedTakeItem(
                 take = take,
                 onPlayClick = {},
-                onDeleteClick = {}
+                onDeleteClick = {},
+                isPlaying = false
             )
         }
 
@@ -46,7 +47,8 @@ class RecordedTakeItemInstrumentedTest {
             RecordedTakeItem(
                 take = take,
                 onPlayClick = {},
-                onDeleteClick = {}
+                onDeleteClick = {},
+                isPlaying = false
             )
         }
 
@@ -65,7 +67,8 @@ class RecordedTakeItemInstrumentedTest {
             RecordedTakeItem(
                 take = take,
                 onPlayClick = {},
-                onDeleteClick = {}
+                onDeleteClick = {},
+                isPlaying = false
             )
         }
 
@@ -84,7 +87,8 @@ class RecordedTakeItemInstrumentedTest {
             RecordedTakeItem(
                 take = take,
                 onPlayClick = {},
-                onDeleteClick = {}
+                onDeleteClick = {},
+                isPlaying = false
             )
         }
 
@@ -102,7 +106,8 @@ class RecordedTakeItemInstrumentedTest {
             RecordedTakeItem(
                 take = take,
                 onPlayClick = {},
-                onDeleteClick = {}
+                onDeleteClick = {},
+                isPlaying = false
             )
         }
 
@@ -121,7 +126,8 @@ class RecordedTakeItemInstrumentedTest {
             RecordedTakeItem(
                 take = take,
                 onPlayClick = { playClicked = true },
-                onDeleteClick = {}
+                onDeleteClick = {},
+                isPlaying = false
             )
         }
 
@@ -143,7 +149,8 @@ class RecordedTakeItemInstrumentedTest {
             RecordedTakeItem(
                 take = take,
                 onPlayClick = {},
-                onDeleteClick = { deleteClicked = true }
+                onDeleteClick = { deleteClicked = true },
+                isPlaying = false
             )
         }
 
