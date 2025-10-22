@@ -1,5 +1,6 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.recorderUtils
 
+import com.example.audiorecorder.fileUtils.OutputFileFactory
 import java.io.File
 
 class AudioRecorder(

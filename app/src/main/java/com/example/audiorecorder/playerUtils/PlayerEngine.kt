@@ -1,4 +1,4 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.playerUtils
 
 /**
  * Abstraction for audio playback engine
@@ -13,6 +13,7 @@ interface PlayerEngine {
     fun seekTo(position: Int)
     fun getCurrentPosition(): Int
     fun getDuration(): Int
+    fun getAudioId(): Int
     fun isPlaying(): Boolean
     fun release()
     fun setOnCompletionListener(listener: () -> Unit)

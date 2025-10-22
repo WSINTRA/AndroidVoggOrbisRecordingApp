@@ -1,11 +1,14 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.fileUtils
 
 import android.media.MediaMetadataRetriever
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert.*
 import java.io.File
 
 class RealAudioMetadataReaderTest {
@@ -41,7 +44,7 @@ class RealAudioMetadataReaderTest {
         val duration = audioMetadataReader.getDuration(file)
 
         // Assert
-        assertEquals(5000L, duration)
+        Assert.assertEquals(5000L, duration)
         verify { mockRetriever.release() }
     }
 
@@ -59,7 +62,7 @@ class RealAudioMetadataReaderTest {
         val duration = audioMetadataReader.getDuration(file)
 
         // Assert
-        assertEquals(0L, duration)
+        Assert.assertEquals(0L, duration)
         verify { mockRetriever.release() }
     }
 
@@ -77,7 +80,7 @@ class RealAudioMetadataReaderTest {
         val duration = audioMetadataReader.getDuration(file)
 
         // Assert
-        assertEquals(0L, duration)
+        Assert.assertEquals(0L, duration)
         verify { mockRetriever.release() }
     }
 
@@ -93,7 +96,7 @@ class RealAudioMetadataReaderTest {
         val duration = audioMetadataReader.getDuration(file)
 
         // Assert
-        assertEquals(0L, duration)
+        Assert.assertEquals(0L, duration)
         verify { mockRetriever.release() }
     }
 }

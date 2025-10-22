@@ -6,6 +6,23 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.*
+import com.example.audiorecorder.fileUtils.AudioMetadataReader
+import com.example.audiorecorder.fileUtils.FileProvider
+import com.example.audiorecorder.fileUtils.MediaMetadataRetrieverFactory
+import com.example.audiorecorder.fileUtils.OutputFileFactory
+import com.example.audiorecorder.fileUtils.RealAudioMetadataReader
+import com.example.audiorecorder.fileUtils.RealFileProvider
+import com.example.audiorecorder.fileUtils.RealMediaMetadataRetrieverFactory
+import com.example.audiorecorder.fileUtils.RealOutputFileFactory
+import com.example.audiorecorder.playerUtils.AudioPlayer
+import com.example.audiorecorder.playerUtils.PlayerEngine
+import com.example.audiorecorder.playerUtils.RealPlayerEngine
+import com.example.audiorecorder.recorderUtils.AudioRecorder
+import com.example.audiorecorder.recorderUtils.RealRecorderEngine
+import com.example.audiorecorder.recorderUtils.RecordedTake
+import com.example.audiorecorder.fileUtils.RecordedTakesRepository
+import com.example.audiorecorder.recorderUtils.RecorderEngine
+import com.example.audiorecorder.ui.screens.MainScreen
 import com.example.audiorecorder.ui.theme.AudioRecorderTheme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -42,8 +59,10 @@ class MainActivity : ComponentActivity() {
 
         // Initialize repository for managing recorded takes
         fileProvider = RealFileProvider(this)  // Store reference
-        val metadataReaderFactory: MediaMetadataRetrieverFactory = RealMediaMetadataRetrieverFactory()
-        val audioMetadataReader: AudioMetadataReader = RealAudioMetadataReader(metadataReaderFactory)
+        val metadataReaderFactory: MediaMetadataRetrieverFactory =
+            RealMediaMetadataRetrieverFactory()
+        val audioMetadataReader: AudioMetadataReader =
+            RealAudioMetadataReader(metadataReaderFactory)
         recordedTakesRepository = RecordedTakesRepository(fileProvider, audioMetadataReader)
 
         // Initialize audio player

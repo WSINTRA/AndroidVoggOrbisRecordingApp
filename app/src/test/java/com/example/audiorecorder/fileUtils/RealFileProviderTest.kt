@@ -1,11 +1,11 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.fileUtils
 
 import android.content.Context
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert.*
 import java.io.File
 
 class RealFileProviderTest {
@@ -22,15 +22,14 @@ class RealFileProviderTest {
     @Test
     fun shouldReturnRecordingsDirectory() {
         // Arrange
-        val expectedDir = File("/mock/files/Recordings")
         every { mockContext.getExternalFilesDir(null) } returns File("/mock/files")
 
         // Act
         val result = fileProvider.getRecordingsDirectory()
 
         // Assert
-        assertEquals("Recordings", result.name)
-        assertTrue(result.path.endsWith("Recordings"))
+        Assert.assertEquals("Recordings", result.name)
+        Assert.assertTrue(result.path.endsWith("Recordings"))
     }
 
     @Test
@@ -48,8 +47,8 @@ class RealFileProviderTest {
         val result = fileProvider.getRecordingsDirectory()
 
         // Assert
-        assertTrue(result.exists())
-        assertTrue(result.isDirectory)
+        Assert.assertTrue(result.exists())
+        Assert.assertTrue(result.isDirectory)
 
         // Cleanup
         recordingsDir.deleteRecursively()

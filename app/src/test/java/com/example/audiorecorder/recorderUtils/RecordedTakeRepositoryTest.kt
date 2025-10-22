@@ -1,11 +1,16 @@
 package com.example.audiorecorder
 
+import com.example.audiorecorder.fileUtils.AudioMetadataReader
+import com.example.audiorecorder.fileUtils.FileProvider
+import com.example.audiorecorder.recorderUtils.RecordedTake
+import com.example.audiorecorder.fileUtils.RecordedTakesRepository
 import io.mockk.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.Assert.*
 import java.io.File
+import java.util.Date
 
 class RecordedTakesRepositoryTest {
 
@@ -136,7 +141,7 @@ class RecordedTakesRepositoryTest {
         val file = mockk<File>(relaxed = true) {
             every { delete() } returns true
         }
-        val take = RecordedTake(file, 5000L, java.util.Date())
+        val take = RecordedTake(file, 5000L, Date())
 
         // Act
         val result = repository.deleteTake(take)
@@ -152,7 +157,7 @@ class RecordedTakesRepositoryTest {
         val file = mockk<File>(relaxed = true) {
             every { delete() } returns false
         }
-        val take = RecordedTake(file, 5000L, java.util.Date())
+        val take = RecordedTake(file, 5000L, Date())
 
         // Act
         val result = repository.deleteTake(take)

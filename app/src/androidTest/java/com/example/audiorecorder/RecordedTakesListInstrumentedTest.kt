@@ -3,6 +3,8 @@ package com.example.audiorecorder
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.audiorecorder.recorderUtils.RecordedTake
+import com.example.audiorecorder.ui.components.RecordedTakesList
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,7 +27,8 @@ class RecordedTakesListInstrumentedTest {
             RecordedTakesList(
                 takes = emptyList,
                 onPlayClick = {},
-                onDeleteClick = {}
+                onDeleteClick = {},
+                currentlyPlayingTake = null
             )
         }
 
@@ -47,7 +50,8 @@ class RecordedTakesListInstrumentedTest {
             RecordedTakesList(
                 takes = takes,
                 onPlayClick = {},
-                onDeleteClick = {}
+                onDeleteClick = {},
+                currentlyPlayingTake = null
             )
         }
 
@@ -67,7 +71,8 @@ class RecordedTakesListInstrumentedTest {
             RecordedTakesList(
                 takes = takes,
                 onPlayClick = {},
-                onDeleteClick = {}
+                onDeleteClick = {},
+                currentlyPlayingTake = null
             )
         }
 
@@ -86,7 +91,8 @@ class RecordedTakesListInstrumentedTest {
             RecordedTakesList(
                 takes = listOf(take),
                 onPlayClick = { clickedTake = it },
-                onDeleteClick = {}
+                onDeleteClick = {},
+                currentlyPlayingTake = null
             )
         }
 
@@ -108,7 +114,8 @@ class RecordedTakesListInstrumentedTest {
             RecordedTakesList(
                 takes = listOf(take),
                 onPlayClick = {},
-                onDeleteClick = { clickedTake = it }
+                onDeleteClick = { clickedTake = it },
+                currentlyPlayingTake = null
             )
         }
 
@@ -131,7 +138,8 @@ class RecordedTakesListInstrumentedTest {
             RecordedTakesList(
                 takes = takes,
                 onPlayClick = {},
-                onDeleteClick = {}
+                onDeleteClick = {},
+                currentlyPlayingTake = null
             )
         }
 

@@ -1,11 +1,12 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.recorderUtils
 
+import com.example.audiorecorder.fileUtils.OutputFileFactory
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
-import org.junit.Assert.assertEquals
+import org.junit.Assert
 import org.junit.Test
 import java.io.File
 
@@ -27,7 +28,7 @@ class AudioRecorderTest {
         val result = recorder.start()
 
         // Assert: verify behavior and ordering (factory -> prepare(file) -> start()).
-        assertEquals(expected, result)
+        Assert.assertEquals(expected, result)
         verifyOrder {
             outputFactory.nextFile()
             engine.prepare(expected)
@@ -47,8 +48,8 @@ class AudioRecorderTest {
         val stopFile = recorder.stop()
 
         // Assert
-        assertEquals(file, startFile)
-        assertEquals(file, stopFile)
+        Assert.assertEquals(file, startFile)
+        Assert.assertEquals(file, stopFile)
         verify(exactly = 1) { outputFactory.nextFile() } // Should only call once
     }
 }

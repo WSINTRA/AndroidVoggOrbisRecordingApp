@@ -3,12 +3,13 @@ package com.example.audiorecorder
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.audiorecorder.ui.components.TimerUI
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class RecordingTimerInstrumentedTest {
+class TimerUIInstrumentedTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -17,7 +18,7 @@ class RecordingTimerInstrumentedTest {
     fun shouldDisplayInitialTime() {
         // Arrange & Act
         composeTestRule.setContent {
-            RecordingTimer(elapsedTimeMillis = 0)
+            TimerUI(elapsedTimeMillis = 0)
         }
 
         // Assert
@@ -28,7 +29,7 @@ class RecordingTimerInstrumentedTest {
     fun shouldDisplaySeconds() {
         // Arrange & Act
         composeTestRule.setContent {
-            RecordingTimer(elapsedTimeMillis = 5000) // 5 seconds
+            TimerUI(elapsedTimeMillis = 5000) // 5 seconds
         }
 
         // Assert
@@ -39,7 +40,7 @@ class RecordingTimerInstrumentedTest {
     fun shouldDisplayMinutesAndSeconds() {
         // Arrange & Act
         composeTestRule.setContent {
-            RecordingTimer(elapsedTimeMillis = 125000) // 2 minutes 5 seconds
+            TimerUI(elapsedTimeMillis = 125000) // 2 minutes 5 seconds
         }
 
         // Assert
@@ -50,7 +51,7 @@ class RecordingTimerInstrumentedTest {
     fun shouldDisplayTensOfMinutes() {
         // Arrange & Act
         composeTestRule.setContent {
-            RecordingTimer(elapsedTimeMillis = 725000) // 12 minutes 5 seconds
+            TimerUI(elapsedTimeMillis = 725000) // 12 minutes 5 seconds
         }
 
         // Assert
@@ -61,7 +62,7 @@ class RecordingTimerInstrumentedTest {
     fun shouldPadSecondsWithZero() {
         // Arrange & Act
         composeTestRule.setContent {
-            RecordingTimer(elapsedTimeMillis = 63000) // 1 minute 3 seconds
+            TimerUI(elapsedTimeMillis = 63000) // 1 minute 3 seconds
         }
 
         // Assert
@@ -72,7 +73,7 @@ class RecordingTimerInstrumentedTest {
     fun shouldDisplayHoursIfNeeded() {
         // Arrange & Act
         composeTestRule.setContent {
-            RecordingTimer(elapsedTimeMillis = 3665000) // 1 hour 1 minute 5 seconds
+            TimerUI(elapsedTimeMillis = 3665000) // 1 hour 1 minute 5 seconds
         }
 
         // Assert

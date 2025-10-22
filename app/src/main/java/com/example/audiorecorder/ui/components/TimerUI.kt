@@ -1,4 +1,4 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.ui.components
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.MaterialTheme
@@ -8,10 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 
 /**
- * Displays a recording timer in MM:SS or HH:MM:SS format
+ * Displays a timer in MM:SS or HH:MM:SS format
  */
 @Composable
-fun RecordingTimer(
+fun TimerUI(
     elapsedTimeMillis: Long,
     modifier: Modifier = Modifier
 ) {

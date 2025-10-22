@@ -1,4 +1,4 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.playerUtils
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
@@ -58,6 +58,15 @@ class RealPlayerEngine : PlayerEngine {
         return try {
             mediaPlayer.duration
         } catch (e: IllegalStateException) {
+            0
+        }
+    }
+
+    override fun getAudioId(): Int {
+        return try {
+            mediaPlayer.audioSessionId
+        } catch (e: IllegalStateException) {
+            println("Error getting audio ID: ${e.message}")
             0
         }
     }

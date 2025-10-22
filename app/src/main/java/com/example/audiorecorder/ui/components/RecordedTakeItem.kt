@@ -1,14 +1,16 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.audiorecorder.recorderUtils.RecordedTake
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,6 +20,7 @@ import java.util.*
 @Composable
 fun RecordedTakeItem(
     take: RecordedTake,
+    isPlaying: Boolean,
     onPlayClick: () -> Unit,
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -56,7 +59,7 @@ fun RecordedTakeItem(
             ) {
                 IconButton(onClick = onPlayClick) {
                     Icon(
-                        imageVector = Icons.Default.PlayArrow,
+                        imageVector = if (isPlaying) Icons.Default.Stop else Icons.Default.PlayArrow,
                         contentDescription = "Play"
                     )
                 }

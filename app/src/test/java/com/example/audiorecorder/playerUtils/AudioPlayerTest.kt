@@ -1,10 +1,13 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.playerUtils
 
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert.*
 import java.io.File
 
 class AudioPlayerTest {
@@ -102,7 +105,7 @@ class AudioPlayerTest {
         val position = audioPlayer.getCurrentPosition()
 
         // Assert
-        assertEquals(3000, position)
+        Assert.assertEquals(3000, position)
     }
 
     @Test
@@ -116,7 +119,7 @@ class AudioPlayerTest {
         val duration = audioPlayer.getDuration()
 
         // Assert
-        assertEquals(10000, duration)
+        Assert.assertEquals(10000, duration)
     }
 
     @Test
@@ -130,7 +133,7 @@ class AudioPlayerTest {
         val isPlaying = audioPlayer.isPlaying()
 
         // Assert
-        assertTrue(isPlaying)
+        Assert.assertTrue(isPlaying)
     }
 
     @Test

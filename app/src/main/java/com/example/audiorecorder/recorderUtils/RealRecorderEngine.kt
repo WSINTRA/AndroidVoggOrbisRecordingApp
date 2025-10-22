@@ -1,4 +1,4 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.recorderUtils
 
 import android.content.Context
 import android.media.MediaRecorder
@@ -6,7 +6,7 @@ import java.io.File
 import java.io.IOException
 
 class RealRecorderEngine(
-    private val context: Context
+    context: Context
 ) : RecorderEngine {
 
     private val mediaRecorder = MediaRecorder(context)
@@ -14,11 +14,12 @@ class RealRecorderEngine(
     override fun prepare(output: File) {
         mediaRecorder.apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            setOutputFile(output.absolutePath)
             setAudioSamplingRate(48000) // Professional standard
             setAudioEncodingBitRate(320000) // Maximum quality
             setAudioChannels(2) // Stereo if supported
-            setOutputFile(output.absolutePath)
             try {
                 prepare()
             } catch (e: IOException) {

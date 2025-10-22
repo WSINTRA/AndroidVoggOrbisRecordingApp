@@ -1,4 +1,4 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.ui.screens
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -10,6 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.example.audiorecorder.recorderUtils.RecordedTake
+import com.example.audiorecorder.ui.components.RecordedTakesList
+import com.example.audiorecorder.ui.components.TimerUI
 import kotlinx.coroutines.delay
 
 /**
@@ -29,18 +32,32 @@ fun MainScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    var elapsedTime by remember { mutableStateOf(0L) }
+    var recordingElapsedTime by remember { mutableStateOf(0L) }
+    var playbackElapsedTime by remember { mutableStateOf(0L) }
 
-    // Timer effect
+    // Recording Timer effect
     LaunchedEffect(isRecording) {
         if (isRecording) {
             val startTime = System.currentTimeMillis()
             while (isRecording) {
-                elapsedTime = System.currentTimeMillis() - startTime
+                recordingElapsedTime = System.currentTimeMillis() - startTime
                 delay(100) // Update every 100ms
             }
         } else {
-            elapsedTime = 0L
+            recordingElapsedTime = 0L
+        }
+    }
+
+    // Playback Timer effect
+    LaunchedEffect(isPlaying) {
+        if (isPlaying) {
+            val startTime = System.currentTimeMillis()
+            while (isPlaying) {
+                playbackElapsedTime = System.currentTimeMillis() - startTime
+                delay(100) // Update every 100ms
+            }
+        } else {
+            playbackElapsedTime = 0L
         }
     }
 
@@ -64,8 +81,15 @@ fun MainScreen(
             Spacer(modifier = Modifier.height(32.dp))
             // Recording Timer
             if (isRecording) {
-                RecordingTimer(
-                    elapsedTimeMillis = elapsedTime,
+                TimerUI(
+                    elapsedTimeMillis = recordingElapsedTime,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
+            // Playback Timer
+            if (isPlaying) {
+                TimerUI(
+                    elapsedTimeMillis = playbackElapsedTime,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
             }
@@ -103,6 +127,7 @@ fun MainScreen(
 
         // List of recordings
         RecordedTakesList(
+            currentlyPlayingTake = currentlyPlayingTake,
             takes = recordedTakes,
             onPlayClick = onPlayClick,
             onDeleteClick = onDeleteClick,
