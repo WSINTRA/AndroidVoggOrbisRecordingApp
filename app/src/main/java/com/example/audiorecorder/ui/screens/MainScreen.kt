@@ -8,10 +8,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.example.audiorecorder.playerUtils.AudioEffectProcessor
 import com.example.audiorecorder.recorderUtils.RecordedTake
 import com.example.audiorecorder.ui.components.RecordedTakesList
+import com.example.audiorecorder.ui.components.ThreeBandEqControl
+import com.example.audiorecorder.ui.components.ThreeBandEqState
 import com.example.audiorecorder.ui.components.TimerUI
 import kotlinx.coroutines.delay
 
@@ -24,6 +28,7 @@ fun MainScreen(
     isRecording: Boolean,
     currentlyPlayingTake: RecordedTake?,
     isPlaying: Boolean,
+    audioEffectProcessor: AudioEffectProcessor?,
     onStartRecordingClick: () -> Unit,
     onStopRecordingClick: () -> Unit,
     onPlayClick: (RecordedTake) -> Unit,
@@ -34,6 +39,18 @@ fun MainScreen(
     val context = LocalContext.current
     var recordingElapsedTime by remember { mutableStateOf(0L) }
     var playbackElapsedTime by remember { mutableStateOf(0L) }
+
+
+    // EQ state - default neutral position (5 out of 10)
+    var eqState by remember {
+        mutableStateOf(
+            ThreeBandEqState(
+                lowGain = 5f,
+                midGain = 5f,
+                highGain = 5f
+            )
+        )
+    }
 
     // Recording Timer effect
     LaunchedEffect(isRecording) {
@@ -138,5 +155,23 @@ fun MainScreen(
             onDeleteClick = onDeleteClick,
             modifier = Modifier.weight(1f)
         )
+
+        // EQ Controls - shown only when playing
+
+        HorizontalDivider()
+        ThreeBandEqControl(
+            state = eqState,
+            enabled = isPlaying,
+            onStateChange = { newState ->
+                eqState = newState
+                // Apply EQ changes to audio processor
+                audioEffectProcessor?.applyEqSettings(newState)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .testTag("eq_controls")
+        )
+
     }
 }

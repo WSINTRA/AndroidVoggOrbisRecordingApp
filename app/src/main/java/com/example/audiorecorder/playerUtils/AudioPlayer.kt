@@ -69,6 +69,13 @@ class AudioPlayer(private val playerEngine: PlayerEngine) {
     }
 
     /**
+     * Get the audio session ID
+     */
+    fun getAudioSessionId(): Int {
+        return playerEngine.getAudioId()
+    }
+
+    /**
      * Check if audio is currently playing
      */
     fun isPlaying(): Boolean {

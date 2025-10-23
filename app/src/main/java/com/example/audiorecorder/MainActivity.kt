@@ -21,6 +21,8 @@ import com.example.audiorecorder.recorderUtils.AudioRecorder
 import com.example.audiorecorder.recorderUtils.RealRecorderEngine
 import com.example.audiorecorder.recorderUtils.RecordedTake
 import com.example.audiorecorder.fileUtils.RecordedTakesRepository
+import com.example.audiorecorder.playerUtils.AudioEffectProcessor
+import com.example.audiorecorder.playerUtils.RealAudioEffectProcessor
 import com.example.audiorecorder.recorderUtils.RecorderEngine
 import com.example.audiorecorder.ui.screens.MainScreen
 import com.example.audiorecorder.ui.theme.AudioRecorderTheme
@@ -31,6 +33,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var recordedTakesRepository: RecordedTakesRepository
     private lateinit var audioPlayer: AudioPlayer
     private lateinit var fileProvider: FileProvider
+    private lateinit var audioEffectProcessor: AudioEffectProcessor
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -69,6 +72,9 @@ class MainActivity : ComponentActivity() {
         val playerEngine: PlayerEngine = RealPlayerEngine()
         audioPlayer = AudioPlayer(playerEngine)
 
+        // Initialize audio effect processor
+        audioEffectProcessor = RealAudioEffectProcessor()
+
 
         setContent {
             AudioRecorderTheme {
@@ -88,11 +94,24 @@ class MainActivity : ComponentActivity() {
         var recordedTakes by remember { mutableStateOf(recordedTakesRepository.getAllTakes()) }
         var currentlyPlayingTake by remember { mutableStateOf<RecordedTake?>(null) }
 
+        // Attach/detach audio effect based on playback state
+        LaunchedEffect(audioPlayer.isPlaying()) {
+            if (audioPlayer.isPlaying()) {
+                // Attach effect to current audio session
+                val audioSessionId = audioPlayer.getAudioSessionId()
+                audioEffectProcessor.attach(audioSessionId)
+            } else {
+                // Detach effect when not playing
+                audioEffectProcessor.detach()
+            }
+        }
+
         MainScreen(
             recordedTakes = recordedTakes,
             isRecording = isRecording,
             currentlyPlayingTake = currentlyPlayingTake,
             isPlaying = audioPlayer.isPlaying(),
+            audioEffectProcessor = audioEffectProcessor,
             onStartRecordingClick = {
                 // Stop playback before recording
                 if (currentlyPlayingTake != null) {
