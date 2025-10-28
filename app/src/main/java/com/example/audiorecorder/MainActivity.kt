@@ -16,13 +16,13 @@ import com.example.audiorecorder.fileUtils.RealMediaMetadataRetrieverFactory
 import com.example.audiorecorder.fileUtils.RealOutputFileFactory
 import com.example.audiorecorder.playerUtils.AudioPlayer
 import com.example.audiorecorder.playerUtils.PlayerEngine
-import com.example.audiorecorder.playerUtils.RealPlayerEngine
 import com.example.audiorecorder.recorderUtils.AudioRecorder
 import com.example.audiorecorder.recorderUtils.RealRecorderEngine
 import com.example.audiorecorder.recorderUtils.RecordedTake
 import com.example.audiorecorder.fileUtils.RecordedTakesRepository
 import com.example.audiorecorder.playerUtils.AudioEffectProcessor
 import com.example.audiorecorder.playerUtils.RealAudioEffectProcessor
+import com.example.audiorecorder.playerUtils.RealAudioTrackPlayerEngine
 import com.example.audiorecorder.recorderUtils.RecorderEngine
 import com.example.audiorecorder.ui.screens.MainScreen
 import com.example.audiorecorder.ui.theme.AudioRecorderTheme
@@ -69,7 +69,10 @@ class MainActivity : ComponentActivity() {
         recordedTakesRepository = RecordedTakesRepository(fileProvider, audioMetadataReader)
 
         // Initialize audio player
-        val playerEngine: PlayerEngine = RealPlayerEngine()
+        val playerEngine: PlayerEngine = RealAudioTrackPlayerEngine(
+            context = this,
+            bufferSizeInFrames = 4096  // ~85ms at 48kHz - balanced latency/stability
+        )
         audioPlayer = AudioPlayer(playerEngine)
 
         // Initialize audio effect processor
