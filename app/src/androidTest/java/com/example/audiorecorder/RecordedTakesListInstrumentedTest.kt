@@ -27,6 +27,7 @@ class RecordedTakesListInstrumentedTest {
             RecordedTakesList(
                 takes = emptyList,
                 onPlayClick = {},
+                onExportClick = {},
                 onDeleteClick = {},
                 currentlyPlayingTake = null
             )
@@ -50,6 +51,7 @@ class RecordedTakesListInstrumentedTest {
             RecordedTakesList(
                 takes = takes,
                 onPlayClick = {},
+                onExportClick = {},
                 onDeleteClick = {},
                 currentlyPlayingTake = null
             )
@@ -71,6 +73,7 @@ class RecordedTakesListInstrumentedTest {
             RecordedTakesList(
                 takes = takes,
                 onPlayClick = {},
+                onExportClick = {},
                 onDeleteClick = {},
                 currentlyPlayingTake = null
             )
@@ -91,12 +94,37 @@ class RecordedTakesListInstrumentedTest {
             RecordedTakesList(
                 takes = listOf(take),
                 onPlayClick = { clickedTake = it },
+                onExportClick = {},
                 onDeleteClick = {},
                 currentlyPlayingTake = null
             )
         }
 
         composeTestRule.onNodeWithContentDescription("Play").performClick()
+        composeTestRule.waitForIdle()
+
+        // Assert
+        assert(clickedTake == take)
+    }
+
+    @Test
+    fun shouldCallOnExportClickWhenExportButtonClicked() {
+        // Arrange
+        val take = createTestTake(filename = "test.m4a")
+        var clickedTake: RecordedTake? = null
+
+        // Act
+        composeTestRule.setContent {
+            RecordedTakesList(
+                takes = listOf(take),
+                onPlayClick = {},
+                onExportClick = { clickedTake = it },
+                onDeleteClick = {},
+                currentlyPlayingTake = null
+            )
+        }
+
+        composeTestRule.onNodeWithContentDescription("Export to Music").performClick()
         composeTestRule.waitForIdle()
 
         // Assert
@@ -114,6 +142,7 @@ class RecordedTakesListInstrumentedTest {
             RecordedTakesList(
                 takes = listOf(take),
                 onPlayClick = {},
+                onExportClick = {},
                 onDeleteClick = { clickedTake = it },
                 currentlyPlayingTake = null
             )
@@ -138,6 +167,7 @@ class RecordedTakesListInstrumentedTest {
             RecordedTakesList(
                 takes = takes,
                 onPlayClick = {},
+                onExportClick = {},
                 onDeleteClick = {},
                 currentlyPlayingTake = null
             )

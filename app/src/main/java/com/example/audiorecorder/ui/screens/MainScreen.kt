@@ -33,6 +33,7 @@ fun MainScreen(
     onStopRecordingClick: () -> Unit,
     onPlayClick: (RecordedTake) -> Unit,
     onDeleteClick: (RecordedTake) -> Unit,
+    onExportClick: (RecordedTake) -> Unit,
     onRequestPermission: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -153,7 +154,9 @@ fun MainScreen(
             takes = recordedTakes,
             onPlayClick = onPlayClick,
             onDeleteClick = onDeleteClick,
+            onExportClick = onExportClick,
             modifier = Modifier.weight(1f)
+
         )
 
         // EQ Controls - shown only when playing

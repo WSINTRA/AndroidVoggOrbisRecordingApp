@@ -3,6 +3,7 @@ package com.example.audiorecorder.ui.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.*
@@ -23,6 +24,7 @@ fun RecordedTakeItem(
     isPlaying: Boolean,
     onPlayClick: () -> Unit,
     onDeleteClick: () -> Unit,
+    onExportClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -57,12 +59,26 @@ fun RecordedTakeItem(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                // Play/Stop button
                 IconButton(onClick = onPlayClick) {
                     Icon(
                         imageVector = if (isPlaying) Icons.Default.Stop else Icons.Default.PlayArrow,
-                        contentDescription = "Play"
+                        contentDescription = if (isPlaying) "Stop" else "Play"
                     )
                 }
+
+                // Export button
+                IconButton(onClick = onExportClick) {
+                    Icon(
+                        imageVector = Icons.Default.FileDownload,
+                        contentDescription = "Export to Music"
+                    )
+                }
+
+                // Spacer before delete
+                Spacer(modifier = Modifier.width(8.dp))
+
+                // Delete button
                 IconButton(onClick = onDeleteClick) {
                     Icon(
                         imageVector = Icons.Default.Delete,

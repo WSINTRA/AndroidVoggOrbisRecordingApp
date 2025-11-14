@@ -7,10 +7,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.*
 import com.example.audiorecorder.fileUtils.AudioMetadataReader
+import com.example.audiorecorder.fileUtils.ExportResult
+import com.example.audiorecorder.fileUtils.FileExporter
 import com.example.audiorecorder.fileUtils.FileProvider
 import com.example.audiorecorder.fileUtils.MediaMetadataRetrieverFactory
 import com.example.audiorecorder.fileUtils.OutputFileFactory
 import com.example.audiorecorder.fileUtils.RealAudioMetadataReader
+import com.example.audiorecorder.fileUtils.RealFileExporter
 import com.example.audiorecorder.fileUtils.RealFileProvider
 import com.example.audiorecorder.fileUtils.RealMediaMetadataRetrieverFactory
 import com.example.audiorecorder.fileUtils.RealOutputFileFactory
@@ -27,12 +30,17 @@ import com.example.audiorecorder.recorderUtils.RecorderEngine
 import com.example.audiorecorder.ui.screens.MainScreen
 import com.example.audiorecorder.ui.theme.AudioRecorderTheme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     private lateinit var audioRecorder: AudioRecorder
     private lateinit var recordedTakesRepository: RecordedTakesRepository
     private lateinit var audioPlayer: AudioPlayer
     private lateinit var fileProvider: FileProvider
+    private lateinit var fileExporter: FileExporter
     private lateinit var audioEffectProcessor: AudioEffectProcessor
 
     private val requestPermissionLauncher = registerForActivityResult(
@@ -59,7 +67,8 @@ class MainActivity : ComponentActivity() {
 
         val outputFactory: OutputFileFactory = RealOutputFileFactory(fileProvider)
         audioRecorder = AudioRecorder(engine, outputFactory)
-
+// Initialize file exporter
+        fileExporter = RealFileExporter(this)
         // Initialize repository for managing recorded takes
         fileProvider = RealFileProvider(this)  // Store reference
         val metadataReaderFactory: MediaMetadataRetrieverFactory =
@@ -152,6 +161,9 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             },
+            onExportClick = { take ->
+                handleExport(take)
+            },
             onDeleteClick = { take ->
                 // Stop playback if this file is playing
                 if (currentlyPlayingTake == take) {
@@ -185,7 +197,29 @@ class MainActivity : ComponentActivity() {
             e.printStackTrace()
         }
     }
+    private fun handleExport(take: RecordedTake) {
+        // Run export on background thread
+        CoroutineScope(Dispatchers.IO).launch {
+            // Use filename without extension as display name
+            val displayName = take.file.nameWithoutExtension
 
+            val result = fileExporter.exportToMusic(take.file, displayName)
+
+            // Show result on main thread (silent for now as per requirements)
+            withContext(Dispatchers.Main) {
+                when (result) {
+                    is ExportResult.Success -> {
+                        // Success - no UI feedback for first iteration
+                        println("Export successful: ${result.uri}")
+                    }
+                    is ExportResult.Error -> {
+                        // Error - no UI feedback for first iteration
+                        println("Export failed: ${result.message}")
+                    }
+                }
+            }
+        }
+    }
     private fun handleStopRecording() {
         try {
             println("=== STOP RECORDING ===")
