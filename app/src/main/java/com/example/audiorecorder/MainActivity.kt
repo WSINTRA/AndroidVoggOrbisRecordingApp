@@ -1,6 +1,7 @@
 package com.example.audiorecorder
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 class MainActivity : ComponentActivity() {
     private lateinit var audioRecorder: AudioRecorder
@@ -139,6 +141,9 @@ class MainActivity : ComponentActivity() {
                 // Refresh the list after recording stops
                 recordedTakes = recordedTakesRepository.getAllTakes()
             },
+            onShareClick = { take ->
+                handleShare(take)
+            },
             onPlayClick = { take ->
                 // Stop recording if active
                 if (isRecording) {
@@ -183,7 +188,40 @@ class MainActivity : ComponentActivity() {
             }
         )
     }
+    private fun handleShare(take: RecordedTake) {
+        try {
+            // Create content URI using FileProvider
+            val contentUri =androidx.core.content.FileProvider.getUriForFile(
+                this,
+                "${applicationContext.packageName}.fileprovider",
+                take.file
+            )
 
+            // Determine MIME type
+            val mimeType = when (take.file.extension.lowercase()) {
+                "mp3" -> "audio/mpeg"
+                "m4a", "aac" -> "audio/aac"
+                "wav" -> "audio/wav"
+                "ogg" -> "audio/ogg"
+                "flac" -> "audio/flac"
+                else -> "audio/*"
+            }
+
+            // Create share intent
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = mimeType
+                putExtra(Intent.EXTRA_STREAM, contentUri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+
+            // Show share sheet
+            startActivity(Intent.createChooser(shareIntent, "Share audio file"))
+
+        } catch (e: Exception) {
+            println("ERROR sharing file: ${e.message}")
+            e.printStackTrace()
+        }
+    }
     private fun handleStartRecording() {
         try {
             println("=== START RECORDING ===")
@@ -250,3 +288,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+

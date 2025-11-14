@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ fun RecordedTakeItem(
     onPlayClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onExportClick: () -> Unit,
+    onShareClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -74,7 +76,13 @@ fun RecordedTakeItem(
                         contentDescription = "Export to Music"
                     )
                 }
-
+// Share button
+                IconButton(onClick = onShareClick) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share"
+                    )
+                }
                 // Spacer before delete
                 Spacer(modifier = Modifier.width(8.dp))
 

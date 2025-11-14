@@ -22,6 +22,7 @@ fun RecordedTakesList(
     onPlayClick: (RecordedTake) -> Unit,
     onDeleteClick: (RecordedTake) -> Unit,
     onExportClick: (RecordedTake) -> Unit,
+    onShareClick: (RecordedTake) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (takes.isEmpty()) {
@@ -51,6 +52,7 @@ fun RecordedTakesList(
                     onPlayClick = { onPlayClick(take) },
                     onDeleteClick = { onDeleteClick(take) },
                     onExportClick = { onExportClick(take) },
+                    onShareClick = { onShareClick(take) }
                 )
             }
         }

@@ -29,6 +29,7 @@
                     onPlayClick = {},
                     onExportClick = {},
                     onDeleteClick = {},
+                    onShareClick = {},
                     isPlaying = false
                 )
             }
@@ -49,6 +50,7 @@
                     onPlayClick = {},
                     onExportClick = {},
                     onDeleteClick = {},
+                    onShareClick = {},
                     isPlaying = false
                 )
             }
@@ -69,6 +71,7 @@
                     onPlayClick = {},
                     onExportClick = {},
                     onDeleteClick = {},
+                    onShareClick = {},
                     isPlaying = false
                 )
             }
@@ -90,6 +93,7 @@
                     onPlayClick = {},
                     onExportClick = {},
                     onDeleteClick = {},
+                    onShareClick = {},
                     isPlaying = false
                 )
             }
@@ -110,6 +114,7 @@
                     onPlayClick = {},
                     onExportClick = {},
                     onDeleteClick = {},
+                    onShareClick = {},
                     isPlaying = false
                 )
             }
@@ -130,6 +135,7 @@
                     onPlayClick = {},
                     onExportClick = {},
                     onDeleteClick = {},
+                    onShareClick = {},
                     isPlaying = false
                 )
             }
@@ -151,7 +157,9 @@
                     onPlayClick = { playClicked = true },
                     onExportClick = {},
                     onDeleteClick = {},
-                    isPlaying = false
+                    onShareClick = {},
+                    isPlaying = false,
+
                 )
             }
 
@@ -175,6 +183,7 @@
                     onPlayClick = {},
                     onExportClick = { exportClicked = true },
                     onDeleteClick = {},
+                    onShareClick = {},
                     isPlaying = false
                 )
             }
@@ -199,6 +208,7 @@
                     onPlayClick = {},
                     onExportClick = {},
                     onDeleteClick = { deleteClicked = true },
+                    onShareClick = {},
                     isPlaying = false
                 )
             }

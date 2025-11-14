@@ -34,6 +34,7 @@ fun MainScreen(
     onPlayClick: (RecordedTake) -> Unit,
     onDeleteClick: (RecordedTake) -> Unit,
     onExportClick: (RecordedTake) -> Unit,
+    onShareClick: (RecordedTake) -> Unit,
     onRequestPermission: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -155,6 +156,7 @@ fun MainScreen(
             onPlayClick = onPlayClick,
             onDeleteClick = onDeleteClick,
             onExportClick = onExportClick,
+            onShareClick = onShareClick,
             modifier = Modifier.weight(1f)
 
         )

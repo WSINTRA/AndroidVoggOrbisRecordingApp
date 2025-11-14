@@ -10,4 +10,6 @@ interface FileProvider {
      * Returns the directory where recordings are stored
      */
     fun getRecordingsDirectory(): File
+
+    companion object
 }
